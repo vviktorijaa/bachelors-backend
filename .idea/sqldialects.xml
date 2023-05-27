@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/flyway/src/main/resources/db/migration/V1.1__create_initial_tables_and_add_admin_user.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/invoice-service/src/main/java/bachelors/invoice/invoiceservice/repository/CustomerRepository.java" dialect="GenericSQL" />
+  </component>
+</project>
