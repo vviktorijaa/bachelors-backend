@@ -5,9 +5,6 @@ import bachelors.invoice.invoiceservice.model.dto.InvoiceDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +18,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, String> {
                    "JOIN InvoiceScan invoiceScan ON invoice.invoiceNumber = invoiceScan.invoiceNumber JOIN Vendor vendor ON invoice.vendorId = vendor.id")
     List<InvoiceDTO> findAllWithDateScanned();
 
-    @Query(value = "SELECT new bachelors.invoice.invoiceservice.model.dto.InvoiceDTO(vendor.vendorName, invoice.invoiceNumber, invoice.dueDate, invoice.totalAmount, invoiceScan.scanTimestamp) FROM Invoice invoice JOIN InvoiceScan invoiceScan ON invoice.invoiceNumber = invoiceScan.invoiceNumber JOIN Vendor vendor ON invoice.vendorId = vendor.id WHERE FUNCTION('DATEDIFF', DAY, CURRENT_DATE, invoice.dueDate) BETWEEN 0 AND 30")
+    @Query(value = "SELECT new bachelors.invoice.invoiceservice.model.dto.InvoiceDTO(vendor.vendorName, invoice.invoiceNumber, invoice.dueDate, invoice.totalAmount, invoiceScan.scanTimestamp) FROM Invoice invoice JOIN InvoiceScan invoiceScan ON invoice.invoiceNumber = invoiceScan.invoiceNumber JOIN Vendor vendor ON invoice.vendorId = vendor.id WHERE FUNCTION('DATEDIFF', DAY, CURRENT_DATE, invoice.dueDate) BETWEEN 0 AND 7")
     List<InvoiceDTO> findAllDueNextWeek();
 
     @Query(value = "SELECT vendor.vendorEmail, count(invoice.invoiceNumber) as numberOccurences FROM Invoice invoice JOIN Vendor vendor ON invoice.vendorId = vendor.id GROUP BY vendor.vendorEmail")
