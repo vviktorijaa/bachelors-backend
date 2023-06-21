@@ -1,8 +1,8 @@
 package bachelors.invoice.invoiceservice.web;
 
+import bachelors.invoice.invoiceservice.model.User;
 import bachelors.invoice.invoiceservice.service.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,8 +19,8 @@ public class LoginController {
         this.userService = userService;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<Object> login(@AuthenticationPrincipal Principal principal) {
+    @PostMapping(value="/login", produces="application/json")
+    public ResponseEntity<User> login(Principal principal) {
         return ResponseEntity.ok(this.userService.findByEmail(principal.getName()));
     }
 }
