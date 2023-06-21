@@ -19,12 +19,6 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-    private final UserService userService;
-
-    public WebSecurityConfig(UserService userService) {
-        this.userService = userService;
-    }
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
@@ -32,29 +26,37 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
+        http
+                .cors().and().csrf().disable()
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/", "/login").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/scan",
+                                "/loginUser",
+                                "/users",
+                                "/invoices",
+                                "/dueNextWeek",
+                                "/groupedByVendor",
+                                "/groupedByVendorTotalAmountPerMonth",
+                                "/totalAmountPerMonth").authenticated()
                 )
                 .formLogin((form) -> form
+                        .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/login")
+                        .defaultSuccessUrl("/loginUser")
                         .permitAll()
-                );
-        http
+                )
                 .cors((cors) -> cors
                         .configurationSource(corsConfigurationSource())
                 );
+
         return http.build();
     }
 
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
-        System.out.println("CORS CONFIGURATION SOURCE");
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200")); // Update with your Angular app's URL
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
