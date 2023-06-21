@@ -60,14 +60,22 @@ public class ScanInvoiceController {
 
         byte[] imgBytes = scannedInvoice.getBytes();
         Document<CustomV1Inference> customDocument = getMindeeApiResponse(scannedInvoice.getBytes());
-        JsonNode jsonNode = getJsonNode(customDocument);
+        JsonNode jsonNode = generateJsonNode(customDocument);
 
         LOG.info("Preprocessing response from invoice-api...");
         List<List<List<Double>>> regions = preprocessDataService.preprocessData(jsonNode);
         LOG.info("Invoice saved successfully.");
 
-        ImageRegionsModel imageRegionsModel = createImageRegionsModel(imgBytes, regions);
+        ImageRegionsModel imageRegionsModel = generateImageRegionsModel(imgBytes, regions);
         return ResponseEntity.ok(imageRegionsModel);
+    }
+
+    public ImageRegionsModel generateImageRegionsModel(byte[] imgBytes, List<List<List<Double>>> regions) {
+        return createImageRegionsModel(imgBytes, regions);
+    }
+
+    public JsonNode generateJsonNode(Document<CustomV1Inference> customDocument) throws JsonProcessingException {
+        return getJsonNode(customDocument);
     }
 
     private ImageRegionsModel createImageRegionsModel(byte[] imgBytes, List<List<List<Double>>> regions) {

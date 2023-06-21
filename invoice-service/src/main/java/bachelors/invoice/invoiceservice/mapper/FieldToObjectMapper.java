@@ -4,6 +4,7 @@ import bachelors.invoice.invoiceservice.model.*;
 import bachelors.invoice.invoiceservice.utils.PreprocessDataUtil;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -16,7 +17,15 @@ public record FieldToObjectMapper() {
                               final Invoice invoice,
                               final InvoiceLineItems invoiceLineItems) {
         if (!value.isEmpty()) {
-            String v = value.get(0).getValue();
+            String v = "";
+            List<String> stringList = new ArrayList<>();
+            if (key.equals("invoice_number") || key.equals("customer_name") || key.equals("customer_address")) {
+                for (ConfidenceRegionValue values : value) {
+                    stringList.add(values.getValue());
+                }
+            } else {
+                v = value.get(0).getValue();
+            }
             switch (key) {
                 case "vendor_name" -> vendor.setVendorName(v);
                 case "vendor_address" -> vendor.setVendorAddress(v);
@@ -25,7 +34,7 @@ public record FieldToObjectMapper() {
                 case "customer_number" -> customer.setCustomerNumber(v);
                 case "customer_name" -> customer.setCustomerName(v);
                 case "customer_address" -> customer.setCustomerAddress(v);
-                case "invoice_number" -> invoice.setInvoiceNumber(v);
+                case "invoice_number" -> invoice.setInvoiceNumber(PreprocessDataUtil.concat(stringList));
                 case "date_overpaid" -> invoice.setDateOverpaid(PreprocessDataUtil.convertToDate(key, v));
                 case "date_issued" -> invoice.setDateIssued(PreprocessDataUtil.convertToDate(key, v));
                 case "place_issued" -> invoice.setPlaceIssued(v);

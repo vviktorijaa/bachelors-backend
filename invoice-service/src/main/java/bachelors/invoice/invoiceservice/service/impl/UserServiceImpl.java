@@ -28,9 +28,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByEmail(String email) {
-        Optional<User> user = this.userRepository.findByEmail(email);
-        return user.get();
+    public Optional<User> findByEmail(String email) {
+        User user = this.userRepository.findByEmail(email);
+        return Optional.ofNullable(user);
+    }
+
+    @Override
+    public Optional<User> findByEmailAndPassword(String email, String password) {
+        User user = this.userRepository.findByEmailAndPassword(email, password);
+        return Optional.ofNullable(user);
     }
 
     @Override
@@ -43,20 +49,4 @@ public class UserServiceImpl implements UserService {
     public void deleteById(Long id) {
         this.userRepository.deleteById(id);
     }
-
-
-//    @Override
-//    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-//        Optional<User> userOptional = userRepository.findByEmail(email);
-//        User user = userOptional.orElseThrow(() -> new UsernameNotFoundException(email + " not found!"));
-//
-//        return org.springframework.security.core.userdetails.User.builder()
-//                .username(user.getEmail())
-//                .password(user.getPassword()).build();
-//    }
-//
-//    private String encodePassword(String password) {
-//        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-//        return bCryptPasswordEncoder.encode(password);
-//    }
 }
