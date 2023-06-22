@@ -1,12 +1,10 @@
 package bachelors.invoice.invoiceservice.web;
 
 import bachelors.invoice.invoiceservice.model.User;
+import bachelors.invoice.invoiceservice.model.dto.LoginUserDTO;
 import bachelors.invoice.invoiceservice.service.UserService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.security.Principal;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -18,8 +16,8 @@ public class LoginController {
         this.userService = userService;
     }
 
-    @GetMapping(value="/loginUser")
-    public User login(Principal principal) {
-        return this.userService.findByEmail(principal.getName());
+    @RequestMapping(value="/login")
+    public ResponseEntity<User> login(@RequestBody LoginUserDTO loginUserDTO) {
+        return ResponseEntity.ok(this.userService.findByEmail(loginUserDTO.username()));
     }
 }

@@ -1,8 +1,8 @@
 package bachelors.invoice.invoiceservice.config;
 
-import bachelors.invoice.invoiceservice.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,29 +26,22 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .cors().and().csrf().disable()
+        http.cors().and().csrf()
+                .disable()
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/", "/login").permitAll()
-                        .requestMatchers("/scan",
+                        .requestMatchers(HttpMethod.OPTIONS, "/**")
+                .permitAll()
+                        .requestMatchers("/login")
+                .permitAll()
+                        .requestMatchers( "/scan",
+                                "/dashboard",
                                 "/loginUser",
                                 "/users",
                                 "/invoices",
                                 "/dueNextWeek",
                                 "/groupedByVendor",
                                 "/groupedByVendorTotalAmountPerMonth",
-                                "/totalAmountPerMonth").authenticated()
-                )
-                .formLogin((form) -> form
-                        .loginPage("/login")
-                        .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/loginUser")
-                        .permitAll()
-                )
-                .cors((cors) -> cors
-                        .configurationSource(corsConfigurationSource())
-                );
-
+                                "/totalAmountPerMonth").authenticated());
         return http.build();
     }
 
@@ -57,7 +50,7 @@ public class WebSecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
 
