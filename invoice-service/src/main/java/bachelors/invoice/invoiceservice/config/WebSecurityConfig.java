@@ -41,7 +41,8 @@ public class WebSecurityConfig {
                                 "/dueNextWeek",
                                 "/groupedByVendor",
                                 "/groupedByVendorTotalAmountPerMonth",
-                                "/totalAmountPerMonth").authenticated());
+                                "/totalAmountPerMonth").authenticated())
+                .httpBasic();
         return http.build();
     }
 
