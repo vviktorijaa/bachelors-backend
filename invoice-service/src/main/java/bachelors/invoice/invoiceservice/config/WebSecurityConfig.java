@@ -34,6 +34,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/login")
                 .permitAll()
                         .requestMatchers( "/scan",
+                                "/scan/invoice",
                                 "/dashboard",
                                 "/loginUser",
                                 "/users",
