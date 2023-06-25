@@ -27,6 +27,6 @@ public interface InvoiceRepository extends JpaRepository<Invoice, String> {
     @Query(value = "SELECT vendor.vendorEmail, count(invoice.invoiceNumber) as numberOccurences, sum(invoice.totalAmount) AS totalAmount, FUNCTION('date_part', 'MONTH', scan.scanTimestamp) as month FROM Invoice invoice JOIN Vendor vendor ON invoice.vendorId = vendor.id join InvoiceScan as scan on invoice.invoiceNumber = scan.invoiceNumber WHERE FUNCTION('date_part', 'MONTH', scan.scanTimestamp) = FUNCTION('date_part', 'MONTH', CURRENT_DATE) GROUP BY vendor.vendorEmail, FUNCTION('date_part', 'MONTH', scan.scanTimestamp)")
     List<String> findAllGroupedByVendorWithAmountPerMonth();
 
-    @Query(value = "SELECT count(invoice.invoiceNumber) as numberOccurences, sum(invoice.totalAmount) AS totalAmount, FUNCTION('date_part', 'MONTH', scan.scanTimestamp) as month FROM Invoice invoice join InvoiceScan as scan on invoice.invoiceNumber = scan.invoiceNumber WHERE FUNCTION('date_part', 'MONTH', scan.scanTimestamp) = FUNCTION('date_part', 'MONTH', CURRENT_DATE) GROUP BY FUNCTION('date_part', 'MONTH', scan.scanTimestamp)")
-    List<String> findAllWithAmountPerMonth();
+    @Query(value = "SELECT totalAmountPerMonth.month, totalAmountPerMonth.numberOfInvoices, totalAmountPerMonth.totalAmount FROM TotalAmountPerMonth totalAmountPerMonth")
+    List<String> totalAmountPerMonth();
 }

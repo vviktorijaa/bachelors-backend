@@ -64,6 +64,6 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public List<String> findAllWithAmountPerMonth() {
-        return this.invoiceRepository.findAllWithAmountPerMonth();
+        return this.invoiceRepository.totalAmountPerMonth();
     }
 }
