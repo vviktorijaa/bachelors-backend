@@ -26,4 +26,13 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "userId")
     private List<InvoiceScan> invoiceScan;
+
+    public User() {
+    }
+
+    public User(String email, String password, List<InvoiceScan> invoiceScan) {
+        this.email = email;
+        this.password = password;
+        this.invoiceScan = invoiceScan;
+    }
 }

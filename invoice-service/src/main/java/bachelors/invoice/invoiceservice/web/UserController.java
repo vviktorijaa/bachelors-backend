@@ -1,6 +1,7 @@
 package bachelors.invoice.invoiceservice.web;
 
 import bachelors.invoice.invoiceservice.model.User;
+import bachelors.invoice.invoiceservice.model.dto.UserDTO;
 import bachelors.invoice.invoiceservice.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,13 @@ public class UserController {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<User> createUser(@RequestBody UserDTO userDTO) {
+        return this.userService.create(userDTO)
+                .map(user -> ResponseEntity.ok().body(user))
+                .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
 }

@@ -31,7 +31,8 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(HttpMethod.OPTIONS, "/**")
                 .permitAll()
-                        .requestMatchers("/login")
+                        .requestMatchers("/login",
+                                "/register")
                 .permitAll()
                         .requestMatchers( "/scan",
                                 "/scan/invoice",
